@@ -47,11 +47,23 @@ gameOverDiv.attr("style","display: none");
 gameOverDiv.attr("class","col-12 mx-auto mb-3");
 $("#main").append(gameOverDiv);
 
+
 // Make game over view title and append it to game over div
 var gameOverH = $("<h1>");
 $(gameOverDiv).append(gameOverH);
 gameOverH.text("Game over");
 $(gameOverDiv).append(gameOverH);
+
+var tryAgainBtn = $("<button>");
+tryAgainBtn.attr("class","option btn btn-secondary btn-lg");
+tryAgainBtn.attr("id","start-quiz-again");
+tryAgainBtn.attr("style","display: none");
+$(gameOverDiv).append(tryAgainBtn);
+tryAgainBtn.text("Try again");
+
+$("#start-quiz-again").click(function(){
+    location.reload();
+});
 
 // Make game over view description and append it to game over div
 var gameOverP = $("<h3>");
@@ -87,7 +99,7 @@ function displayNameScore(){ //Go through names and scores and display them
         var scoreP = $("<h3>");
         scoreP.attr("class","quiz-score-board");
         $(gameOverDiv).append(scoreP);
-        scoreP.text(name + " - " + score);
+        scoreP.text(i+1 + ". " + name + ": " + score*100);
     }
 }
 
@@ -120,6 +132,7 @@ gameOverForm.submit(function(event){ //Add a new name to the new score and updat
         $(".quiz-score-board").remove();
         $("#score-form").remove();
         $("#score-explain").remove();
+        tryAgainBtn.attr("style","display: block");
         isSubmitted = true;
     }
     storeNameScore();
@@ -147,12 +160,12 @@ $("#start-quiz").click(function(){ // When you click start quiz button
 
     var timeLeft = setInterval(function(){ //Start the timer and stop when it reaches 0 or when you answer all the questions.
         if (timer <= 0 || score === questions.length){
+            clearInterval(timeLeft);
             $(".quiz-question").attr("style","display: none");
             $("#quiz-timer").attr("style","display: none");
             $("#quiz-over").attr("style","display: block");
-            gameOverP.text("Your final score is " + score + ".");
+            gameOverP.text("Score: " + score*100);
             start();
-            clearInterval(timeLeft);
         }
         timerH.text(timer);
         timer = timer - 1;
