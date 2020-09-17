@@ -1,5 +1,4 @@
-# code-quiz
-04 Code Quiz
+# 04 Code Quiz
 Test your knowledge of Dune and record your score!
 
 ## Links
