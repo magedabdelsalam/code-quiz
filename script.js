@@ -73,7 +73,9 @@ gameOverForm.submit(function(event){
     storeScore = localStorage.setItem("score",JSON.stringify(score));
     scoreP.text(name + " - " +score);
 });
-scoreP.text(storedName + " - " +storedScore);
+if(storedName || storedScore){
+    scoreP.text(storedName + " - " +storedScore);
+}
 
 
 var timerDiv= $("<div>");
@@ -92,10 +94,9 @@ $("#start-quiz").click(function(){
     $("#0").attr("style","display: block");
 
     var timeLeft = setInterval(function(){ 
-        console.log(timer);
         if (timer <= 0 || score === questions.length){
-            $(".quiz-timer").attr("style","display: none");
             $(".quiz-question").attr("style","display: none");
+            $(".quiz-timer").attr("style","display: none");
             $(".quiz-over").attr("style","display: block");
             gameOverP.text("Your final score is " + score + ". Enter your name to record your score.");
             clearInterval(timeLeft);
