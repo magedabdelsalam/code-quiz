@@ -207,7 +207,7 @@ $("#main").append(timerDiv);
 var timerTitle = $("<h3>");
 timerTitle.attr("style","font-size: 4rem;");
 $(timerDiv).append(timerTitle);
-timerTitle.text(timer);
+timerTitle.text(timer + "s");
 
 $("#start-quiz").click(function(){ // When you click start quiz button
 
@@ -218,15 +218,18 @@ $("#start-quiz").click(function(){ // When you click start quiz button
 
     var timeLeft = setInterval(function(){ //Start the timer and stop when it reaches 0 or when you answer all the questions.
         if (timer <= 0 || score === questions.length){
-            clearInterval(timeLeft);
+            if (score === 0){
+                $("#score-form").attr("style","display: none");
+                $("#start-quiz-again").attr("style","display: block");
+            }
             $("#quiz-timer").attr("style","display: none");
             $(".quiz-question").attr("style","display: none");
             $("#quiz-over").attr("style","display: block");
-        } else {
-            gameOverDescription.text("Score: " + score*100);
-            timer = timer - 1;
-            timerTitle.text(timer + "s");
+            clearInterval(timeLeft);
         }
+        gameOverDescription.text("Score: " + score*100);
+        timer = timer - 1;
+        timerTitle.text(timer + "s");
     }, 1000);
 
 });
