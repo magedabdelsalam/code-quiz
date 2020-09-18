@@ -92,7 +92,6 @@ gameOverDiv.attr("style","display: none");
 gameOverDiv.attr("class","col-12 mx-auto mb-3");
 $("#main").append(gameOverDiv);
 
-
 // Make game over view title and append it to game over div
 var gameOverTitle = $("<h2>");
 $(gameOverDiv).append(gameOverTitle);
@@ -128,6 +127,14 @@ gameOverInput.attr("id","score-input");
 gameOverInput.attr("class","form-control");
 gameOverInput.attr("placeholder","Enter your name to record your score.");
 $(gameOverForm).append(gameOverInput);
+
+// Error Alert
+var errorAlert = $("<p>")
+$("#quiz-over").prepend(errorAlert);
+errorAlert.attr("style","display: none");
+errorAlert.attr("class","alert alert-danger");
+errorAlert.text("Your name is too spicy. Please enter between 4-12 characters")
+
 
 // Score Board Vars
 var names = []; //names
@@ -170,18 +177,21 @@ gameOverForm.submit(function(event){ //Add a new name to the new score and updat
     var newScoreContent = score;
     if (!newNameContent || isSubmitted){
         return
-    } else {
+    } else if(newNameContent.length >= 4 && newNameContent.length <= 12){
         names.unshift(newNameContent);
         scores.unshift(newScoreContent);
         $("#score-input").val("");
         $(".quiz-score-board").remove();
         $("#score-form").remove();
         $("#score-explain").remove();
+        errorAlert.attr("style","display: none");
         tryAgainBtn.attr("style","display: block");
         isSubmitted = true;
+        storeNameScore();
+        displayNameScore();
+    } else {
+        errorAlert.attr("style","display: block");
     }
-    storeNameScore();
-    displayNameScore();
 });
 
 start();
@@ -215,7 +225,7 @@ $("#start-quiz").click(function(){ // When you click start quiz button
         } else {
             gameOverDescription.text("Score: " + score*100);
             timer = timer - 1;
-            timerTitle.text(timer);
+            timerTitle.text(timer + "s");
         }
     }, 1000);
 
