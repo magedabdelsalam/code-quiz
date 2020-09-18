@@ -12,10 +12,55 @@
 var timer = 30;
 var currentQuestion = 0;
 
-var questionOne = ["What does Arrakis mean?","1. A dog","2. A rabbit","3. A planet","4. A man","3. A planet"]; // Question 1
-var questionTwo = ["What happens when shield and lazer gun interact?","1. Explode","2. Deflect","3. Penetrate","4. Nothing","1. Explode"];  // Question 2
-var questionThree = ["What house is Paul from?","1. Emperor","2. Fremen","3. Harkonnen","4. Bene gesserit","4. Bene gesserit"];  // Question 3
-var questions = [questionOne,questionTwo,questionThree]; // Nested array of questions
+var questionOne = [
+    "1. What planet do the Atreides occupy at the beginning of Dune?",
+    "1. Arrakis",
+    "2. Giedi Prime",
+    "3. Caladan",
+    "4. Salusa Secundus",
+    "3. Caladan"
+    ]; // Question 1
+var questionTwo = [
+    "2. Which of the following defines Jessica’s relationship with Duke Leto?",
+    "1. She is his daughter",
+    "2. She is his sister",
+    "3. She is his wife",
+    "4. She is his concubine",
+    "4. She is his concubine"
+    ];  // Question 2
+var questionThree = [
+    "3. Jessica is a member of which of the following?",
+    "1. Bene Gesserit",
+    "2. Spacing Guild",
+    "3. Harkonnen",
+    "4. New York Knicks",
+    "1. Bene Gesserit"
+    ];  // Question 3
+var questionFour = [
+    "4. Who betrays Duke Leto?",
+    "1. Stilgar",
+    "2. Jessica ",
+    "3. Dr. Yueh",
+    "4. Duncan Idaho",
+    "3. Dr. Yueh"
+    ];  // Question 4
+var questionFive = [
+    "5. What is Paul’s tribal name among the Fremen?",
+    "1. Stilgar",
+    "2. Usul",
+    "3. Chani",
+    "4. Muad’Dib",
+    "2. Usul"
+    ];  // Question 5
+var questionSix = [
+    "6. What is the name of the emperor’s prison planet?",
+    "1. Salusa Secundus",
+    "2. Arrakis",
+    "3. Corrino",
+    "4. Caladan",
+    "1. Salusa Secundus"
+    ];  // Question 6
+var questions = [questionOne,questionTwo,questionThree,questionFour,questionFive,questionSix]; // Nested array of questions
 
 for(var i=0;i<questions.length;i++){
     // Make a div, hide it, style it, and append it to main view
@@ -27,7 +72,7 @@ for(var i=0;i<questions.length;i++){
     $("#main").append(questionDiv);
     for(var j=0;j<5;j++){ //Loop through the questions array
         if (j===0){ // Pull the question for each question array
-            var questionH = $("<h1>");
+            var questionH = $("<h2>");
             questionH.attr("class","question");
             $(questionDiv).append(questionH);
             questionH.text(questions[i][j]);
@@ -49,10 +94,10 @@ $("#main").append(gameOverDiv);
 
 
 // Make game over view title and append it to game over div
-var gameOverH = $("<h1>");
-$(gameOverDiv).append(gameOverH);
-gameOverH.text("Game over");
-$(gameOverDiv).append(gameOverH);
+var gameOverTitle = $("<h2>");
+$(gameOverDiv).append(gameOverTitle);
+gameOverTitle.text("Game over");
+$(gameOverDiv).append(gameOverTitle);
 
 var tryAgainBtn = $("<button>");
 tryAgainBtn.attr("class","option btn btn-secondary btn-lg");
@@ -66,9 +111,9 @@ $("#start-quiz-again").click(function(){
 });
 
 // Make game over view description and append it to game over div
-var gameOverP = $("<h3>");
-gameOverP.attr("id","score-explain");
-$(gameOverDiv).append(gameOverP);
+var gameOverDescription = $("<h3>");
+gameOverDescription.attr("id","score-explain");
+$(gameOverDiv).append(gameOverDescription);
 
 // Make game over score form and append it to game over div
 var gameOverForm = $("<form>");
@@ -139,6 +184,8 @@ gameOverForm.submit(function(event){ //Add a new name to the new score and updat
     displayNameScore();
 });
 
+start();
+
 // Make timer div, hide it, and add it to main view
 var timerDiv= $("<div>");
 timerDiv.attr("style","display: none");
@@ -147,9 +194,10 @@ timerDiv.attr("class","col-12 mx-auto mb-3");
 $("#main").append(timerDiv);
 
 // Make timer counter and add it to timer div
-var timerH = $("<h3>");
-$(timerDiv).append(timerH);
-timerH.text(timer);
+var timerTitle = $("<h3>");
+timerTitle.attr("style","font-size: 4rem;");
+$(timerDiv).append(timerTitle);
+timerTitle.text(timer);
 
 $("#start-quiz").click(function(){ // When you click start quiz button
 
@@ -161,14 +209,14 @@ $("#start-quiz").click(function(){ // When you click start quiz button
     var timeLeft = setInterval(function(){ //Start the timer and stop when it reaches 0 or when you answer all the questions.
         if (timer <= 0 || score === questions.length){
             clearInterval(timeLeft);
-            $(".quiz-question").attr("style","display: none");
             $("#quiz-timer").attr("style","display: none");
+            $(".quiz-question").attr("style","display: none");
             $("#quiz-over").attr("style","display: block");
-            gameOverP.text("Score: " + score*100);
-            start();
+        } else {
+            gameOverDescription.text("Score: " + score*100);
+            timer = timer - 1;
+            timerTitle.text(timer);
         }
-        timerH.text(timer);
-        timer = timer - 1;
     }, 1000);
 
 });
@@ -182,7 +230,8 @@ $(".option").click(function(){ //
         console.log(score);
         currentQuestion++; // Go to the next question
     } else if($(this).text() != questions[currentQuestion][5]){ // Reduce timer by 10 seconds if you select the wrong option
-        timer = timer - 10;
+        $(this).attr("style","background:red;");
+        timer = timer - 5;
     }
 });
 
